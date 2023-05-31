@@ -18,3 +18,10 @@ include::{snippets}/create-post-success/http-request.adoc[]
 
 .response
 include::{snippets}/create-post-success/http-response.adoc[]
+
+==== 실패
+.request
+include::{snippets}/create-post-fail/http-request.adoc[]
+
+.response
+include::{snippets}/create-post-fail/http-response.adoc[]
