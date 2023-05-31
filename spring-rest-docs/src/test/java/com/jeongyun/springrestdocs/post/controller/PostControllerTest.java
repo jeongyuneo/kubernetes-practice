@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -23,9 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class PostControllerTest extends ApiDocument {
 
     private static final String SUCCESS_MESSAGE = "success";
+    private static final String FAIL_MESSAGE = "fail";
 
     private PostRequest postRequest;
     private PostResponse successResponse;
+    private PostResponse failResponse;
 
     // (1) mocking을 하기 위해 @MockBean 선언
     @MockBean
@@ -42,6 +45,9 @@ public class PostControllerTest extends ApiDocument {
         successResponse = PostResponse.builder()
                 .message(SUCCESS_MESSAGE)
                 .build();
+        failResponse = PostResponse.builder()
+                .message(FAIL_MESSAGE)
+                .build();
     }
 
     @DisplayName("게시글 저장 성공")
@@ -55,6 +61,17 @@ public class PostControllerTest extends ApiDocument {
         게시글_저장_성공(resultActions);
     }
 
+    @DisplayName("게시글 저장 실패")
+    @Test
+    void create_post_fail() throws Exception {
+        // given
+        willThrow(new IllegalArgumentException(FAIL_MESSAGE)).given(postService).create(any(PostRequest.class));
+        // when
+        ResultActions resultActions = 게시글_저장_요청(postRequest);
+        // then
+        게시글_저장_실패(resultActions);
+    }
+
     private ResultActions 게시글_저장_요청(PostRequest postRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/posts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -66,5 +83,12 @@ public class PostControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(successResponse)))
                 .andDo(print())
                 .andDo(toDocument("create-post-success"));  // (5) ApiDocument에 정의한 toDocument() 메소드를 사용해 문서 작성
+    }
+
+    private void 게시글_저장_실패(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(content().json(toJson(failResponse)))
+                .andDo(print())
+                .andDo(toDocument("create-post-fail"));
     }
 }
