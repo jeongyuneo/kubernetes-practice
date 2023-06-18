@@ -18,6 +18,6 @@ public class ChattingController {
     @MessageMapping("/chattings/{chattingId}/messages")
     public void chat(@DestinationVariable Long chattingId, ChattingRequest chattingRequest) {
         log.info("Message [{}] send by member: {} to chatting room: {}", chattingRequest.getContent(), chattingRequest.getSenderId(), chattingId);
-        simpMessagingTemplate.convertAndSend("/subscription/rooms/" + chattingId, chattingRequest.getContent());
+        simpMessagingTemplate.convertAndSend("/subscription/chattings/" + chattingId, chattingRequest.getContent());
     }
 }
