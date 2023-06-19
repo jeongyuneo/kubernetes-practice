@@ -15,10 +15,12 @@ import org.springframework.stereotype.Controller;
 public class ChattingController {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final ChattingService chattingService;
 
     @MessageMapping("/chattings/{chattingRoomId}/messages")
     public void chat(@DestinationVariable Long chattingRoomId, ChattingRequest chattingRequest) {
-        log.info("Message [{}] send by member: {} to chatting room: {}", chattingRequest.getContent(), chattingRequest.getSenderId(), chattingId);
-        simpMessagingTemplate.convertAndSend("/subscription/chattings/" + chattingId, chattingRequest.getContent());
+        simpMessagingTemplate.convertAndSend("/subscription/chattings/" + chattingRoomId, chattingRequest.getContent());
+        chattingService.save(chattingRoomId, chattingRequest);
+        log.info("Message [{}] send by member: {} to chatting room: {}", chattingRequest.getContent(), chattingRequest.getSenderId(), chattingRoomId);
     }
 }
