@@ -24,7 +24,7 @@ public class Chatting extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chatting_room_id")
     private ChattingRoom chattingRoom;
 }
