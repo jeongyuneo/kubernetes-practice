@@ -35,4 +35,8 @@ public class ChattingService {
     public List<ChattingRoom> getChattingRooms() {
         return chattingRoomRepository.findAllRoom();
     }
+
+    public ChattingRoom getChattingRoom(String chattingRoomId) {
+        return chattingRoomRepository.findRoomById(chattingRoomId);
+    }
 }
