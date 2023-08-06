@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -51,5 +52,9 @@ public class ChattingRoomRepository {
             TOPICS.put(chattingRoomId, topic);
         }
         log.info("enter in chatting room '{}'", chattingRoomId);
+    }
+
+    public List<ChattingRoom> findAllRoom() {
+        return opsHashChattingRoom.values(CHATTING_ROOM);
     }
 }
