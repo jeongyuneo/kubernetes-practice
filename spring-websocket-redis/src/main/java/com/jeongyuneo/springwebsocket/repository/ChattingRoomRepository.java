@@ -57,4 +57,8 @@ public class ChattingRoomRepository {
     public List<ChattingRoom> findAllRoom() {
         return opsHashChattingRoom.values(CHATTING_ROOM);
     }
+
+    public ChattingRoom findRoomById(String chattingRoomId) {
+        return opsHashChattingRoom.get(CHATTING_ROOM, chattingRoomId);
+    }
 }
