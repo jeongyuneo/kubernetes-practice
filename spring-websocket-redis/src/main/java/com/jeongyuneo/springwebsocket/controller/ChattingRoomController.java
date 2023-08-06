@@ -29,4 +29,9 @@ public class ChattingRoomController {
     public List<ChattingRoom> getChattingRooms() {
         return chattingService.getChattingRooms();
     }
+
+    @GetMapping("{chattingRoomId}")
+    public ChattingRoom getChattingRoom(@PathVariable String chattingRoomId) {
+        return chattingService.getChattingRoom(chattingRoomId);
+    }
 }
