@@ -1,5 +1,6 @@
 package com.jeongyuneo.springwebsocket.service;
 
+import com.jeongyuneo.springwebsocket.dto.ChattingRoomCreateRequest;
 import com.jeongyuneo.springwebsocket.dto.MessageRequest;
 import com.jeongyuneo.springwebsocket.repository.ChattingRoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,5 +19,9 @@ public class ChattingService {
 
     public void send(MessageRequest messageRequest) {
         redisPublisher.publish(chattingRoomRepository.getTopic(messageRequest.getChattingRoomId()), messageRequest);
+    }
+
+    public void createChattingRoom(ChattingRoomCreateRequest chattingRoomCreateRequest) {
+        chattingRoomRepository.createChattingRoom(chattingRoomCreateRequest.getName());
     }
 }
