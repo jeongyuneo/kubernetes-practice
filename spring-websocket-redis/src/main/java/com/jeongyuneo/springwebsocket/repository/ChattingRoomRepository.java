@@ -42,4 +42,14 @@ public class ChattingRoomRepository {
         opsHashChattingRoom.put(CHATTING_ROOM, chattingRoom.getId().toString(), chattingRoom);
         log.info("create new chatting room '{}'", chattingRoom.getId());
     }
+
+    public void enterChattingRoom(String chattingRoomId) {
+        ChannelTopic topic = getTopic(chattingRoomId);
+        if (topic == null) {
+            topic = new ChannelTopic(String.valueOf(chattingRoomId));
+            redisMessageListenerContainer.addMessageListener(redisSubscriber, topic);
+            TOPICS.put(chattingRoomId, topic);
+        }
+        log.info("enter in chatting room '{}'", chattingRoomId);
+    }
 }
