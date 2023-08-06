@@ -24,4 +24,8 @@ public class ChattingService {
     public void createChattingRoom(ChattingRoomCreateRequest chattingRoomCreateRequest) {
         chattingRoomRepository.createChattingRoom(chattingRoomCreateRequest.getName());
     }
+
+    public void enterChattingRoom(String chattingRoomId) {
+        chattingRoomRepository.enterChattingRoom(chattingRoomId);
+    }
 }
