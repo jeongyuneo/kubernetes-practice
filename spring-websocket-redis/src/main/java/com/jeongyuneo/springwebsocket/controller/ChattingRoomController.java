@@ -30,7 +30,7 @@ public class ChattingRoomController {
         return chattingService.getChattingRooms();
     }
 
-    @GetMapping("{chattingRoomId}")
+    @GetMapping("/detail/{chattingRoomId}")
     public ChattingRoom getChattingRoom(@PathVariable String chattingRoomId) {
         return chattingService.getChattingRoom(chattingRoomId);
     }
