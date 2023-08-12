@@ -23,6 +23,7 @@ public class ChattingService {
 
     public void send(MessageRequest messageRequest) {
         redisPublisher.publish(chattingRoomRepository.getTopic(messageRequest.getChattingRoomId()), messageRequest);
+        chattingRoomRepository.saveChatting(messageRequest.getChattingRoomId(), messageRequest.toChatting());
     }
 
     public void createChattingRoom(ChattingRoomCreateRequest chattingRoomCreateRequest) {
