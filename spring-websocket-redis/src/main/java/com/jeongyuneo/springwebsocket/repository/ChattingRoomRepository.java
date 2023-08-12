@@ -66,6 +66,10 @@ public class ChattingRoomRepository {
         return opsHashChattingRoom.get(CHATTING_ROOM, chattingRoomId);
     }
 
+    public void saveChatting(String chattingRoomId, Chatting chatting) {
+        opsHashChatting.put(CHATTING_ROOM + DELIMITER + chattingRoomId, chatting.getId(), chatting);
+    }
+
     public List<Chatting> findChattingByChattingRoomId(String chattingRoomId) {
         log.info("get chattings in {}", chattingRoomId);
         return opsHashChatting.values(CHATTING_ROOM + DELIMITER + chattingRoomId);
