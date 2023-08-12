@@ -39,7 +39,7 @@ public class ChattingService {
     }
 
     public ChattingRoom getChattingRoom(String chattingRoomId) {
-        return chattingRoomRepository.findRoomById(chattingRoomId);
+        return chattingRoomRepository.findById(chattingRoomId);
     }
 
     public List<MessageRequest> getChattings(String chattingRoomId) {
