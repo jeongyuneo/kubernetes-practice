@@ -62,7 +62,7 @@ public class ChattingRoomRepository {
         return opsHashChattingRoom.values(CHATTING_ROOM);
     }
 
-    public ChattingRoom findRoomById(String chattingRoomId) {
+    public ChattingRoom findById(String chattingRoomId) {
         return opsHashChattingRoom.get(CHATTING_ROOM, chattingRoomId);
     }
 
