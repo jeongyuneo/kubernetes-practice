@@ -1,5 +1,6 @@
 package com.jeongyuneo.springwebsocket.repository;
 
+import com.jeongyuneo.springwebsocket.entity.Chatting;
 import com.jeongyuneo.springwebsocket.entity.ChattingRoom;
 import com.jeongyuneo.springwebsocket.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class ChattingRoomRepository {
 
     private static final String CHATTING_ROOM = "CHATTING_ROOM";
+    private static final String DELIMITER = ":";
     private static final Map<String, ChannelTopic> TOPICS = new HashMap<>();
 
     private final RedisMessageListenerContainer redisMessageListenerContainer;
@@ -28,10 +30,12 @@ public class ChattingRoomRepository {
     private final RedisSubscriber redisSubscriber;
 
     private HashOperations<String, String, ChattingRoom> opsHashChattingRoom;
+    private HashOperations<String, String, Chatting> opsHashChatting;
 
     @PostConstruct
     private void init() {
         opsHashChattingRoom = redisTemplate.opsForHash();
+        opsHashChatting = redisTemplate.opsForHash();
     }
 
     public ChannelTopic getTopic(String chattingRoomId) {
@@ -60,5 +64,10 @@ public class ChattingRoomRepository {
 
     public ChattingRoom findRoomById(String chattingRoomId) {
         return opsHashChattingRoom.get(CHATTING_ROOM, chattingRoomId);
+    }
+
+    public List<Chatting> findChattingByChattingRoomId(String chattingRoomId) {
+        log.info("get chattings in {}", chattingRoomId);
+        return opsHashChatting.values(CHATTING_ROOM + DELIMITER + chattingRoomId);
     }
 }
