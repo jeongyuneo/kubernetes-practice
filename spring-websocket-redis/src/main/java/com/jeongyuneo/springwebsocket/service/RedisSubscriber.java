@@ -23,7 +23,7 @@ public class RedisSubscriber implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] pattern) {
         MessageRequest messageRequest = toMessageRequest((String) redisTemplate.getStringSerializer().deserialize(message.getBody()));
-        messagingTemplate.convertAndSend("/subscription/chattings/rooms/" + messageRequest.getChattingRoomId(), messageRequest.getContent());
+        messagingTemplate.convertAndSend("/subscription/chattings/rooms/" + messageRequest.getChattingRoomId(), messageRequest);
         log.info("Message [{}] send by member: {} to chatting room: {}", messageRequest.getContent(), messageRequest.getSenderId(), messageRequest.getChattingRoomId());
     }
 
