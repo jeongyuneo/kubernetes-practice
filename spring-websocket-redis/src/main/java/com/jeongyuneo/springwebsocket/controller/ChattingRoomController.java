@@ -1,6 +1,7 @@
 package com.jeongyuneo.springwebsocket.controller;
 
 import com.jeongyuneo.springwebsocket.dto.ChattingRoomCreateRequest;
+import com.jeongyuneo.springwebsocket.dto.MessageRequest;
 import com.jeongyuneo.springwebsocket.entity.ChattingRoom;
 import com.jeongyuneo.springwebsocket.service.ChattingService;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,10 @@ public class ChattingRoomController {
     @GetMapping("/detail/{chattingRoomId}")
     public ChattingRoom getChattingRoom(@PathVariable String chattingRoomId) {
         return chattingService.getChattingRoom(chattingRoomId);
+    }
+
+    @GetMapping("/{chattingRoomId}")
+    public List<MessageRequest> getChattings(@PathVariable String chattingRoomId) {
+        return chattingService.getChattings(chattingRoomId);
     }
 }
