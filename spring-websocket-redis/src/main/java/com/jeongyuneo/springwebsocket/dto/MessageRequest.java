@@ -1,5 +1,6 @@
 package com.jeongyuneo.springwebsocket.dto;
 
+import com.jeongyuneo.springwebsocket.entity.Chatting;
 import lombok.*;
 
 @Getter
@@ -11,4 +12,8 @@ public class MessageRequest {
     private String chattingRoomId;
     private Long senderId;
     private String content;
+
+    public Chatting toChatting() {
+        return Chatting.of(senderId, content);
+    }
 }
