@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,5 +39,17 @@ public class ChattingService {
 
     public ChattingRoom getChattingRoom(String chattingRoomId) {
         return chattingRoomRepository.findRoomById(chattingRoomId);
+    }
+
+    public List<MessageRequest> getChattings(String chattingRoomId) {
+        log.info("find chattings in chatting room: {}", chattingRoomId);
+        return chattingRoomRepository.findChattingByChattingRoomId(chattingRoomId)
+                .stream()
+                .map(chatting -> MessageRequest.builder()
+                        .chattingRoomId(chatting.getId())
+                        .senderId(chatting.getSenderId())
+                        .content(chatting.getContent())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
