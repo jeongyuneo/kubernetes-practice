@@ -1,7 +1,7 @@
 package com.jeongyuneo.springwebsocket.service;
 
 import com.jeongyuneo.springwebsocket.dto.ChattingRoomCreateRequest;
-import com.jeongyuneo.springwebsocket.dto.MessageRequest;
+import com.jeongyuneo.springwebsocket.dto.Message;
 import com.jeongyuneo.springwebsocket.entity.ChattingRoom;
 import com.jeongyuneo.springwebsocket.repository.ChattingRoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +21,9 @@ public class ChattingService {
     private final RedisPublisher redisPublisher;
     private final ChattingRoomRepository chattingRoomRepository;
 
-    public void send(MessageRequest messageRequest) {
-        redisPublisher.publish(chattingRoomRepository.getTopic(messageRequest.getChattingRoomId()), messageRequest);
-        chattingRoomRepository.saveChatting(messageRequest.getChattingRoomId(), messageRequest.toChatting());
+    public void send(Message message) {
+        redisPublisher.publish(chattingRoomRepository.getTopic(message.getChattingRoomId()), message);
+        chattingRoomRepository.saveChatting(message.getChattingRoomId(), message.toChatting());
     }
 
     public void createChattingRoom(ChattingRoomCreateRequest chattingRoomCreateRequest) {
@@ -42,11 +42,11 @@ public class ChattingService {
         return chattingRoomRepository.findById(chattingRoomId);
     }
 
-    public List<MessageRequest> getChattings(String chattingRoomId) {
+    public List<Message> getChattings(String chattingRoomId) {
         log.info("find chattings in chatting room: {}", chattingRoomId);
         return chattingRoomRepository.findChattingByChattingRoomId(chattingRoomId)
                 .stream()
-                .map(chatting -> MessageRequest.builder()
+                .map(chatting -> Message.builder()
                         .chattingRoomId(chatting.getId())
                         .senderId(chatting.getSenderId())
                         .content(chatting.getContent())
