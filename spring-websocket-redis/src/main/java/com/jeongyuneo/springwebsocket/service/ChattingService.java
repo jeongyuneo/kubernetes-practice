@@ -19,10 +19,11 @@ import java.util.stream.Collectors;
 public class ChattingService {
 
     private final RedisPublisher redisPublisher;
+    private final RedisMessageListener redisMessageListener;
     private final ChattingRoomRepository chattingRoomRepository;
 
     public void send(Message message) {
-        redisPublisher.publish(chattingRoomRepository.getTopic(message.getChattingRoomId()), message);
+        redisPublisher.publish(redisMessageListener.getTopic(message.getChattingRoomId()), message);
         chattingRoomRepository.saveChatting(message.getChattingRoomId(), message.toChatting());
     }
 
@@ -31,7 +32,7 @@ public class ChattingService {
     }
 
     public void enterChattingRoom(String chattingRoomId) {
-        chattingRoomRepository.enterChattingRoom(chattingRoomId);
+        redisMessageListener.enterChattingRoom(chattingRoomId);
     }
 
     public List<ChattingRoom> getChattingRooms() {
