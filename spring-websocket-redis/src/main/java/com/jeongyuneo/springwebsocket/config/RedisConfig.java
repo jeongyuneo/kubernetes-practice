@@ -16,7 +16,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
-    private static final String TOPIC_NAME = "topic";
+    private static final String TOPIC_NAME = "chatting";
 
     @Value("${REDIS_HOST}")
     private String host;
