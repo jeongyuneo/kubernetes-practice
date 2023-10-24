@@ -1,7 +1,9 @@
 package com.jeongyuneo.querydsl;
 
 import com.jeongyuneo.querydsl.entity.Member;
+import com.jeongyuneo.querydsl.entity.QMember;
 import com.jeongyuneo.querydsl.entity.Team;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +21,12 @@ public class QuerydslBasicTest {
     @Autowired
     EntityManager entityManager;
 
+    JPAQueryFactory queryFactory;
+
     @BeforeEach
     void before() {
+        queryFactory = new JPAQueryFactory(entityManager);
+
         Team teamA = new Team("teamA");
         Team teamB = new Team("teamB");
         entityManager.persist(teamA);
@@ -44,6 +50,20 @@ public class QuerydslBasicTest {
         Member findMember = entityManager.createQuery(query, Member.class)
                 .setParameter("username", "member1")
                 .getSingleResult();
+        // then
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    void Querydsl을_이용해_멤버1을_찾는다() {
+        // given
+        QMember member = QMember.member;
+        // when
+        Member findMember = queryFactory
+                .select(member)
+                .from(member)
+                .where(member.username.eq("member1"))
+                .fetchOne();
         // then
         assertThat(findMember.getUsername()).isEqualTo("member1");
     }
