@@ -1,7 +1,6 @@
 package com.jeongyuneo.querydsl;
 
 import com.jeongyuneo.querydsl.entity.Member;
-import com.jeongyuneo.querydsl.entity.QMember;
 import com.jeongyuneo.querydsl.entity.Team;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import static com.jeongyuneo.querydsl.entity.QMember.member;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -57,7 +57,6 @@ public class QuerydslBasicTest {
     @Test
     void Querydsl을_이용해_멤버1을_찾는다() {
         // given
-        QMember member = QMember.member;
         // when
         Member findMember = queryFactory
                 .select(member)
