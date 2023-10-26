@@ -117,4 +117,17 @@ public class QuerydslBasicTest {
         assertThat(findMembers.get(1).getUsername()).isEqualTo("member6");
         assertThat(findMembers.get(2).getUsername()).isNull();
     }
+
+    @Test
+    void Querydsl을_이용해_조회건수를_제한한다() {
+        // when
+        List<Member> members = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetch();
+        // then
+        assertThat(members).hasSize(2);
+    }
 }
