@@ -102,7 +102,7 @@ public class QuerydslBasicTest {
      * 단, 2에서 회원 이름이 없으면 마지막에 출력 (nulls last)
      */
     @Test
-    void Querydsl을_이용해_정렬된_멤버를_조회한다() {
+    void Querydsl을_이용해_정렬된_회원을_조회한다() {
         // given
         entityManager.persist(new Member(null, 100));
         entityManager.persist(new Member("member5", 100));
