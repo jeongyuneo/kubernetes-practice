@@ -58,7 +58,6 @@ public class QuerydslBasicTest {
 
     @Test
     void Querydsl을_이용해_멤버1을_찾는다() {
-        // given
         // when
         Member findMember = queryFactory
                 .select(member)
@@ -71,7 +70,6 @@ public class QuerydslBasicTest {
 
     @Test
     void Querydsl을_이용해_나이가_10인_멤버1을_찾는다() {
-        // given
         // when
         // and 연산자
         Member findMember1 = queryFactory
