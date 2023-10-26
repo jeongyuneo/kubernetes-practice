@@ -3,6 +3,7 @@ package com.jeongyuneo.querydsl;
 import com.jeongyuneo.querydsl.entity.Member;
 import com.jeongyuneo.querydsl.entity.Team;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.jeongyuneo.querydsl.entity.QMember.member;
+import static com.jeongyuneo.querydsl.entity.QTeam.team;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -144,5 +146,21 @@ public class QuerydslBasicTest {
         assertThat(members.getLimit()).isEqualTo(2);
         assertThat(members.getOffset()).isEqualTo(1);
         assertThat(members.getResults()).hasSize(2);
+    }
+
+    @Test
+    void Querydsl을_이용해_팀이름과_각팀의_평균연령을_조회한다() {
+        // when
+        List<Tuple> result = queryFactory
+                .select(team.name, member.age.avg())
+                .from(member)
+                .join(member.team, team)
+                .groupBy(team.name)
+                .fetch();
+        // then
+        assertThat(result.get(0).get(team.name)).isEqualTo("teamA");
+        assertThat(result.get(0).get(member.age.avg())).isEqualTo(15); // (10 + 20) / 2
+        assertThat(result.get(1).get(team.name)).isEqualTo("teamB");
+        assertThat(result.get(1).get(member.age.avg())).isEqualTo(35); // (30 + 40) / 2
     }
 }
