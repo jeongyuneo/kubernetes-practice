@@ -2,6 +2,7 @@ package com.jeongyuneo.querydsl;
 
 import com.jeongyuneo.querydsl.entity.Member;
 import com.jeongyuneo.querydsl.entity.Team;
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -129,5 +130,21 @@ public class QuerydslBasicTest {
                 .fetch();
         // then
         assertThat(members).hasSize(2);
+    }
+
+    @Test
+    void Querydsl을_이용해_전체_조회수를_조회한다() {
+        // when
+        QueryResults<Member> members = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetchResults();
+        // then
+        assertThat(members.getTotal()).isEqualTo(4);
+        assertThat(members.getLimit()).isEqualTo(2);
+        assertThat(members.getOffset()).isEqualTo(1);
+        assertThat(members.getResults()).hasSize(2);
     }
 }
