@@ -193,4 +193,21 @@ public class QuerydslBasicTest {
                 .extracting("username")
                 .containsExactly("member1", "member2");
     }
+
+    @Test
+    void Querydsl을_이용해_팀이름과_회원이름이_같은_회원을_조회한다() {
+        // given
+        entityManager.persist(new Member("teamA"));
+        entityManager.persist(new Member("teamB"));
+        // when
+        List<Member> result = queryFactory
+                .select(member)
+                .from(member, team)
+                .where(member.username.eq(team.name))
+                .fetch();
+        // then
+        assertThat(result)
+                .extracting("username")
+                .containsExactly("teamA", "teamB");
+    }
 }
