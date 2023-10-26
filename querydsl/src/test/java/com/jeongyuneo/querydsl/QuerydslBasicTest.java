@@ -163,4 +163,20 @@ public class QuerydslBasicTest {
         assertThat(result.get(1).get(team.name)).isEqualTo("teamB");
         assertThat(result.get(1).get(member.age.avg())).isEqualTo(35); // (30 + 40) / 2
     }
+
+    @Test
+    void Querydsl을_이용해_평균연령이_20이상인_팀이름과_평균연령을_조회한다() {
+        // when
+        List<Tuple> result = queryFactory
+                .select(team.name, member.age.avg())
+                .from(member)
+                .join(member.team, team)
+                .groupBy(team.name)
+                .having(member.age.avg().goe(20))
+                .fetch();
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).get(team.name)).isEqualTo("teamB");
+        assertThat(result.get(0).get(member.age.avg())).isEqualTo(35); // (30 + 40) / 2
+    }
 }
