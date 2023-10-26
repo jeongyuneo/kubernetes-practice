@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 import static com.jeongyuneo.querydsl.entity.QMember.member;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,5 +92,29 @@ public class QuerydslBasicTest {
 
         assertThat(findMember2.getUsername()).isEqualTo("member1");
         assertThat(findMember2.getAge()).isEqualTo(10);
+    }
+
+    /**
+     * 회원 정렬 순서
+     * 1. 회원 나이 내림차순(desc)
+     * 2. 회원 이름 오름차순(asc)
+     * 단, 2에서 회원 이름이 없으면 마지막에 출력 (nulls last)
+     */
+    @Test
+    void Querydsl을_이용해_정렬된_멤버를_조회한다() {
+        // given
+        entityManager.persist(new Member(null, 100));
+        entityManager.persist(new Member("member5", 100));
+        entityManager.persist(new Member("member6", 100));
+        // when
+        List<Member> findMembers = queryFactory
+                .selectFrom(member)
+                .where(member.age.eq(100))
+                .orderBy(member.age.desc(), member.username.asc().nullsLast())
+                .fetch();
+        // then
+        assertThat(findMembers.get(0).getUsername()).isEqualTo("member5");
+        assertThat(findMembers.get(1).getUsername()).isEqualTo("member6");
+        assertThat(findMembers.get(2).getUsername()).isNull();
     }
 }
