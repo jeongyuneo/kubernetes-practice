@@ -210,4 +210,22 @@ public class QuerydslBasicTest {
                 .extracting("username")
                 .containsExactly("teamA", "teamB");
     }
+
+    @Test
+    void Querydsl을_이용해_팀A만_조인해서_모든_회원을_조회한다() {
+        // JPQL: select m, t from Member m left join m.team t on t.name = 'teamA'
+        // when
+        List<Tuple> result = queryFactory
+                .select(member, team)
+                .from(member)
+                .leftJoin(member.team, team)
+                .on(team.name.eq("teamA"))
+                .fetch();
+        // then
+        assertThat(result).hasSize(4);
+        assertThat(result.get(0).get(team).getName()).isEqualTo("teamA");
+        assertThat(result.get(1).get(team).getName()).isEqualTo("teamA");
+        assertThat(result.get(2).get(team)).isNull();
+        assertThat(result.get(3).get(team)).isNull();
+    }
 }
