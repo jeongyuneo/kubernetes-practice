@@ -228,4 +228,29 @@ public class QuerydslBasicTest {
         assertThat(result.get(2).get(team)).isNull();
         assertThat(result.get(3).get(team)).isNull();
     }
+
+    /**
+     * 연관관계 없는 엔티티 외부 조인
+     * 회원의 이름이 팀 이름과 같은 대상 외부 조인
+     */
+    @Test
+    void Querydsl을_이용해_팀이름과_회원이름이_같은_회원을_조회한다2() {
+        // given
+        entityManager.persist(new Member("teamA"));
+        entityManager.persist(new Member("teamB"));
+        entityManager.persist(new Member("teamC"));
+        // when
+        List<Tuple> result = queryFactory
+                .select(member, team)
+                .from(member)
+                .leftJoin(team)
+                .on(member.username.eq(team.name))
+                .fetch();
+        Tuple teamA = result.get(4);
+        Tuple teamB = result.get(5);
+        // then
+        assertThat(result).hasSize(7);
+        assertThat(teamA.get(member).getUsername()).isEqualTo(teamA.get(team).getName());
+        assertThat(teamB.get(member).getUsername()).isEqualTo(teamB.get(team).getName());
+    }
 }
