@@ -272,4 +272,19 @@ public class QuerydslBasicTest {
         // then
         assertThat(entityManagerFactory.getPersistenceUnitUtil().isLoaded(findMember.getTeam())).isFalse();
     }
+
+    @Test
+    void Querydsl을_이용해_페치조인으로_팀을_조회한다() {
+        // given
+        entityManager.flush();
+        entityManager.clear();
+        // when
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .join(member.team, team).fetchJoin()
+                .where(member.username.eq("member1"))
+                .fetchOne();
+        // then
+        assertThat(entityManagerFactory.getPersistenceUnitUtil().isLoaded(findMember.getTeam())).isTrue();
+    }
 }
