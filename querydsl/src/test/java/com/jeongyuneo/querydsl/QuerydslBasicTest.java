@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.util.List;
 
 import static com.jeongyuneo.querydsl.entity.QMember.member;
@@ -24,6 +26,9 @@ public class QuerydslBasicTest {
 
     @Autowired
     EntityManager entityManager;
+
+    @PersistenceUnit
+    EntityManagerFactory entityManagerFactory;
 
     JPAQueryFactory queryFactory;
 
@@ -252,5 +257,19 @@ public class QuerydslBasicTest {
         assertThat(result).hasSize(7);
         assertThat(teamA.get(member).getUsername()).isEqualTo(teamA.get(team).getName());
         assertThat(teamB.get(member).getUsername()).isEqualTo(teamB.get(team).getName());
+    }
+
+    @Test
+    void Querydsl을_이용해_페치조인없이_팀을_조회하지_못한다() {
+        // given
+        entityManager.flush();
+        entityManager.clear();
+        // when
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(member.username.eq("member1"))
+                .fetchOne();
+        // then
+        assertThat(entityManagerFactory.getPersistenceUnitUtil().isLoaded(findMember.getTeam())).isFalse();
     }
 }
