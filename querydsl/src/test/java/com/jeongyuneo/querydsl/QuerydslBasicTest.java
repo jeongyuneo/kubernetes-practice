@@ -1,9 +1,11 @@
 package com.jeongyuneo.querydsl;
 
 import com.jeongyuneo.querydsl.entity.Member;
+import com.jeongyuneo.querydsl.entity.QMember;
 import com.jeongyuneo.querydsl.entity.Team;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -286,5 +288,23 @@ public class QuerydslBasicTest {
                 .fetchOne();
         // then
         assertThat(entityManagerFactory.getPersistenceUnitUtil().isLoaded(findMember.getTeam())).isTrue();
+    }
+
+    @Test
+    void Querydsl을_이용해_서브쿼리로_나이가_가장_많은_회원을_조회한다() {
+        // given
+        QMember subMember = new QMember("subMember");
+        // when
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .where(member.age.eq(
+                        JPAExpressions
+                                .select(subMember.age.max())
+                                .from(subMember)
+                ))
+                .fetch();
+        // then
+        assertThat(result).extracting("age")
+                .containsExactly(40);
     }
 }
