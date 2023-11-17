@@ -327,21 +327,20 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    void Querydsl을_이용해_서브쿼리로_나이가_10살_초과인_회원을_조회한다2() {
+    void Querydsl을_이용해_서브쿼리로_회원들의_평균_나이를_조회한다() {
         // given
         QMember subMember = new QMember("subMember");
         // when
-        List<Member> result = queryFactory
-                .selectFrom(member)
-                .where(member.age.in(
+        List<Tuple> result = queryFactory
+                .select(member.username,
                         JPAExpressions
-                                .select(subMember.age)
-                                .from(subMember)
-                                .where(subMember.age.gt(10))
-                ))
+                                .select(subMember.age.avg())
+                                .from(subMember))
+                .from(member)
                 .fetch();
         // then
-        assertThat(result).extracting("age")
-                .containsExactly(20, 30, 40);
+        for (Tuple tuple : result) {
+            System.out.println(tuple);
+        }
     }
 }
