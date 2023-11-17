@@ -307,4 +307,22 @@ public class QuerydslBasicTest {
         assertThat(result).extracting("age")
                 .containsExactly(40);
     }
+
+    @Test
+    void Querydsl을_이용해_서브쿼리로_나이가_평귱_이상인_회원을_조회한다() {
+        // given
+        QMember subMember = new QMember("subMember");
+        // when
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .where(member.age.goe(
+                        JPAExpressions
+                                .select(subMember.age.avg())
+                                .from(subMember)
+                ))
+                .fetch();
+        // then
+        assertThat(result).extracting("age")
+                .containsExactly(30, 40);
+    }
 }
