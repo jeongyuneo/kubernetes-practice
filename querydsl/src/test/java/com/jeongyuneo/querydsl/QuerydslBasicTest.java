@@ -5,7 +5,6 @@ import com.jeongyuneo.querydsl.entity.QMember;
 import com.jeongyuneo.querydsl.entity.Team;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +19,7 @@ import java.util.List;
 
 import static com.jeongyuneo.querydsl.entity.QMember.member;
 import static com.jeongyuneo.querydsl.entity.QTeam.team;
+import static com.querydsl.jpa.JPAExpressions.select;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -298,8 +298,7 @@ public class QuerydslBasicTest {
         List<Member> result = queryFactory
                 .selectFrom(member)
                 .where(member.age.eq(
-                        JPAExpressions
-                                .select(subMember.age.max())
+                        select(subMember.age.max())
                                 .from(subMember)
                 ))
                 .fetch();
@@ -316,8 +315,7 @@ public class QuerydslBasicTest {
         List<Member> result = queryFactory
                 .selectFrom(member)
                 .where(member.age.goe(
-                        JPAExpressions
-                                .select(subMember.age.avg())
+                        select(subMember.age.avg())
                                 .from(subMember)
                 ))
                 .fetch();
@@ -333,8 +331,7 @@ public class QuerydslBasicTest {
         // when
         List<Tuple> result = queryFactory
                 .select(member.username,
-                        JPAExpressions
-                                .select(subMember.age.avg())
+                        select(subMember.age.avg())
                                 .from(subMember))
                 .from(member)
                 .fetch();
