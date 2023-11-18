@@ -340,4 +340,20 @@ public class QuerydslBasicTest {
             System.out.println(tuple);
         }
     }
+
+    @Test
+    void QueryDsl을_이용해_회원_나이를_케이스별로_출력한다() {
+        // when
+        List<String> result = queryFactory
+                .select(member.age
+                        .when(10).then("열살")
+                        .when(20).then("스무살")
+                        .otherwise("기타"))
+                .from(member)
+                .fetch();
+        // then
+        for (String age : result) {
+            System.out.println("나이: " + age);
+        }
+    }
 }
