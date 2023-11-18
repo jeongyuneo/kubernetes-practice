@@ -6,6 +6,7 @@ import com.jeongyuneo.querydsl.entity.Team;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -364,13 +365,26 @@ public class QuerydslBasicTest {
         List<String> result = queryFactory
                 .select(new CaseBuilder()
                         .when(member.age.between(0, 20)).then("0~20살")
-                        .when(member.age.between(21,30)).then("21~30살")
+                        .when(member.age.between(21, 30)).then("21~30살")
                         .otherwise("기타"))
                 .from(member)
                 .fetch();
         // then
         for (String age : result) {
             System.out.println("나이: " + age);
+        }
+    }
+
+    @Test
+    void QueryDsl을_이용해_회원이름과_상수를_함께_출력한다() {
+        // when
+        List<Tuple> result = queryFactory
+                .select(member.username, Expressions.constant("A"))
+                .from(member)
+                .fetch();
+        // then
+        for (Tuple tuple : result) {
+            System.out.println("나이: " + tuple);
         }
     }
 }
