@@ -387,4 +387,18 @@ public class QuerydslBasicTest {
             System.out.println("나이: " + tuple);
         }
     }
+
+    @Test
+    void QueryDsl을_이용해_회원이름과_나이를_더해서_조회한다() {
+        // when
+        List<String> result = queryFactory
+                .select(member.username.concat("_").concat(member.age.stringValue()))
+                .from(member)
+                .where(member.username.eq("member1"))
+                .fetch();
+        // then
+        for (String memberInfo : result) {
+            System.out.println(memberInfo);
+        }
+    }
 }
