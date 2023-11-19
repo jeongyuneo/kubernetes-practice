@@ -2,6 +2,7 @@ package com.jeongyuneo.querydsl;
 
 import com.jeongyuneo.querydsl.entity.Member;
 import com.jeongyuneo.querydsl.entity.Team;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,19 @@ public class QuerydslAdvancedTest {
         // then
         for (String member : result) {
             System.out.println(member);
+        }
+    }
+
+    @Test
+    void Querydsl을_이용해_회원이름과_나이를_조회한다() {
+        // when
+        List<Tuple> result = queryFactory
+                .select(member.username, member.age)
+                .from(member)
+                .fetch();
+        // then
+        for (Tuple tuple : result) {
+            System.out.println(tuple.get(member.username) + ", " + tuple.get(member.age));
         }
     }
 }
