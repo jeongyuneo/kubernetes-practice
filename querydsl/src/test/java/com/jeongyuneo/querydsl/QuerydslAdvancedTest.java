@@ -1,5 +1,6 @@
 package com.jeongyuneo.querydsl;
 
+import com.jeongyuneo.querydsl.dto.MemberDto;
 import com.jeongyuneo.querydsl.entity.Member;
 import com.jeongyuneo.querydsl.entity.Team;
 import com.querydsl.core.Tuple;
@@ -66,6 +67,17 @@ public class QuerydslAdvancedTest {
         // then
         for (Tuple tuple : result) {
             System.out.println(tuple.get(member.username) + ", " + tuple.get(member.age));
+        }
+    }
+
+    @Test
+    void Querydsl을_이용해_DTO로_회원이름과_나이를_조회한다() {
+        // when
+        List<MemberDto> result = entityManager.createQuery("select new com.jeongyuneo.querydsl.dto.MemberDto(m.username, m.age) from Member m", MemberDto.class)
+                .getResultList();
+        // then
+        for (MemberDto memberDto : result) {
+            System.out.println(memberDto);
         }
     }
 }
