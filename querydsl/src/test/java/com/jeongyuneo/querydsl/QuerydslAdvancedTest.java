@@ -71,7 +71,7 @@ public class QuerydslAdvancedTest {
     }
 
     @Test
-    void Querydsl을_이용해_DTO로_회원이름과_나이를_조회한다() {
+    void JPQL을_이용해_DTO로_회원이름과_나이를_조회한다() {
         // when
         List<MemberDto> result = entityManager.createQuery("select new com.jeongyuneo.querydsl.dto.MemberDto(m.username, m.age) from Member m", MemberDto.class)
                 .getResultList();
