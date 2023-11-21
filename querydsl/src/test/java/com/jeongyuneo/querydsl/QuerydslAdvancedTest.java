@@ -96,4 +96,19 @@ public class QuerydslAdvancedTest {
             System.out.println(memberDto);
         }
     }
+
+    @Test
+    void Querydsl을_이용해_DTO로_회원이름과_나이를_조회한다2() {
+        // when
+        List<MemberDto> result = queryFactory
+                .select(Projections.fields(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
+        // then
+        for (MemberDto memberDto : result) {
+            System.out.println(memberDto);
+        }
+    }
 }
