@@ -4,6 +4,7 @@ import com.jeongyuneo.querydsl.dto.MemberDto;
 import com.jeongyuneo.querydsl.entity.Member;
 import com.jeongyuneo.querydsl.entity.Team;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,6 +76,21 @@ public class QuerydslAdvancedTest {
         // when
         List<MemberDto> result = entityManager.createQuery("select new com.jeongyuneo.querydsl.dto.MemberDto(m.username, m.age) from Member m", MemberDto.class)
                 .getResultList();
+        // then
+        for (MemberDto memberDto : result) {
+            System.out.println(memberDto);
+        }
+    }
+
+    @Test
+    void Querydsl을_이용해_DTO로_회원이름과_나이를_조회한다1() {
+        // when
+        List<MemberDto> result = queryFactory
+                .select(Projections.bean(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
         // then
         for (MemberDto memberDto : result) {
             System.out.println(memberDto);
