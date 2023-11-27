@@ -10,6 +10,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -204,5 +205,37 @@ public class QuerydslAdvancedTest {
                 .selectFrom(member)
                 .where(booleanBuilder)
                 .fetch();
+    }
+
+    @Test
+    void Querydsl을_이용해_회원이름과_나이로_회원을_검색한다2() {
+        // given
+        String usernameParam = "member1";
+        Integer ageParam = 10;
+        // when
+        List<Member> result = searchMember2(usernameParam, ageParam);
+        // then
+        assertThat(result).hasSize(1);
+    }
+
+    private List<Member> searchMember2(String usernameCondition, Integer ageCondition) {
+        return queryFactory
+                .selectFrom(member)
+                .where(usernameEq(usernameCondition), ageEq(ageCondition))
+                .fetch();
+    }
+
+    private BooleanExpression usernameEq(String usernameCondition) {
+        if (usernameCondition == null) {
+            return null;
+        }
+        return member.username.eq(usernameCondition);
+    }
+
+    private BooleanExpression ageEq(Integer ageCondition) {
+        if (ageCondition == null) {
+            return null;
+        }
+        return member.age.eq(ageCondition);
     }
 }
