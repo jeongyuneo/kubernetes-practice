@@ -3,9 +3,12 @@ package com.jeongyuneo.querydsl;
 import com.jeongyuneo.querydsl.dto.MemberDto;
 import com.jeongyuneo.querydsl.dto.UserDto;
 import com.jeongyuneo.querydsl.entity.Member;
+import com.jeongyuneo.querydsl.entity.QMember;
 import com.jeongyuneo.querydsl.entity.Team;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -135,6 +138,25 @@ public class QuerydslAdvancedTest {
                 .select(Projections.fields(UserDto.class,
                         member.username.as("name"),
                         member.age))
+                .from(member)
+                .fetch();
+        // then
+        for (UserDto userDto : result) {
+            System.out.println(userDto);
+        }
+    }
+
+    @Test
+    void Querydsl을_이용해_DTO로_회원이름과_나이를_조회한다5() {
+        // given
+        QMember subMember = new QMember("subMember");
+        // when
+        List<UserDto> result = queryFactory
+                .select(Projections.fields(UserDto.class,
+                        member.username.as("name"),
+                        ExpressionUtils.as(JPAExpressions
+                                .select(subMember.age.max())
+                                .from(subMember), "age")))
                 .from(member)
                 .fetch();
         // then
