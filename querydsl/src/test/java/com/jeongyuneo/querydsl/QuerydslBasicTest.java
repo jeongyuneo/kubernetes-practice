@@ -401,4 +401,18 @@ public class QuerydslBasicTest {
             System.out.println(memberInfo);
         }
     }
+
+    @Test
+    void QueryDsl을_이용해_중복없는_회원이름을_조회한다() {
+        // when
+        List<String> result = queryFactory
+                .select(member.username)
+                .distinct()
+                .from(member)
+                .fetch();
+        // then
+        for (String memberInfo : result) {
+            System.out.println(memberInfo);
+        }
+    }
 }
