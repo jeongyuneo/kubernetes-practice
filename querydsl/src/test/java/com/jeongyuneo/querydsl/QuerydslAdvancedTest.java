@@ -238,4 +238,26 @@ public class QuerydslAdvancedTest {
         }
         return member.age.eq(ageCondition);
     }
+
+    @Test
+    void Querydsl을_이용해_회원이름과_나이로_회원을_검색한다3() {
+        // given
+        String usernameParam = "member1";
+        Integer ageParam = 10;
+        // when
+        List<Member> result = searchMember3(usernameParam, ageParam);
+        // then
+        assertThat(result).hasSize(1);
+    }
+
+    private List<Member> searchMember3(String usernameCondition, Integer ageCondition) {
+        return queryFactory
+                .selectFrom(member)
+                .where(allEq(usernameCondition, ageCondition))
+                .fetch();
+    }
+
+    private BooleanExpression allEq(String usernameCondition, Integer ageCondition) {
+        return usernameEq(usernameCondition).and(ageEq(ageCondition));
+    }
 }
