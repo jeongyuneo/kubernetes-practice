@@ -1,6 +1,7 @@
 package com.jeongyuneo.querydsl;
 
 import com.jeongyuneo.querydsl.dto.MemberDto;
+import com.jeongyuneo.querydsl.dto.QMemberDto;
 import com.jeongyuneo.querydsl.dto.UserDto;
 import com.jeongyuneo.querydsl.entity.Member;
 import com.jeongyuneo.querydsl.entity.QMember;
@@ -162,6 +163,19 @@ public class QuerydslAdvancedTest {
         // then
         for (UserDto userDto : result) {
             System.out.println(userDto);
+        }
+    }
+
+    @Test
+    void Querydsl을_이용해_DTO로_회원이름과_나이를_조회한다6() {
+        // when
+        List<MemberDto> result = queryFactory
+                .select(new QMemberDto(member.username, member.age))
+                .from(member)
+                .fetch();
+        // then
+        for (MemberDto memberDto : result) {
+            System.out.println(memberDto);
         }
     }
 }
