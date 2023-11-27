@@ -6,6 +6,7 @@ import com.jeongyuneo.querydsl.dto.UserDto;
 import com.jeongyuneo.querydsl.entity.Member;
 import com.jeongyuneo.querydsl.entity.QMember;
 import com.jeongyuneo.querydsl.entity.Team;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
@@ -21,6 +22,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.jeongyuneo.querydsl.entity.QMember.member;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
@@ -177,5 +179,30 @@ public class QuerydslAdvancedTest {
         for (MemberDto memberDto : result) {
             System.out.println(memberDto);
         }
+    }
+
+    @Test
+    void Querydsl을_이용해_회원이름과_나이로_회원을_검색한다1() {
+        // given
+        String usernameParam = "member1";
+        Integer ageParam = 10;
+        // when
+        List<Member> result = searchMember1(usernameParam, ageParam);
+        // then
+        assertThat(result).hasSize(1);
+    }
+
+    private List<Member> searchMember1(String usernameCondition, Integer ageCondition) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if (usernameCondition != null) {
+            booleanBuilder.and(member.username.eq(usernameCondition));
+        }
+        if (ageCondition != null) {
+            booleanBuilder.and(member.age.eq(ageCondition));
+        }
+        return queryFactory
+                .selectFrom(member)
+                .where(booleanBuilder)
+                .fetch();
     }
 }
