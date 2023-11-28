@@ -281,4 +281,24 @@ public class QuerydslAdvancedTest {
             System.out.println(member);
         }
     }
+
+    @Test
+    void Querydsl을_이용해_나이가_18살_이상인_회원을_모두_삭제한다() {
+        // given
+        long count = queryFactory
+                .delete(member)
+                .where(member.age.gt(18))
+                .execute();
+        entityManager.flush();
+        entityManager.clear();
+        // when
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+        // then
+        assertThat(count).isEqualTo(3);
+        for (Member member : result) {
+            System.out.println(member);
+        }
+    }
 }
