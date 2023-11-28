@@ -260,4 +260,25 @@ public class QuerydslAdvancedTest {
     private BooleanExpression allEq(String usernameCondition, Integer ageCondition) {
         return usernameEq(usernameCondition).and(ageEq(ageCondition));
     }
+
+    @Test
+    void Querydsl을_이용해_나이가_28살보다_어린_회원의_이름을_수정한다() {
+        // given
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+        entityManager.flush();
+        entityManager.clear();
+        // when
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+        // then
+        assertThat(count).isEqualTo(2);
+        for (Member member : result) {
+            System.out.println(member);
+        }
+    }
 }
