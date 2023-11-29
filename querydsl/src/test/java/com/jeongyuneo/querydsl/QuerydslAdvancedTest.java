@@ -11,6 +11,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -299,6 +300,21 @@ public class QuerydslAdvancedTest {
         assertThat(count).isEqualTo(3);
         for (Member member : result) {
             System.out.println(member);
+        }
+    }
+
+    @Test
+    void Querydsl을_이용해_모든_회원이름을_member를_M으로_대체해서_조회한다() {
+        // when
+        List<String> result = queryFactory
+                .select(Expressions.stringTemplate(
+                        "function('replace', {0}, {1}, {2})",
+                        member.username, "member", "M"))
+                .from(member)
+                .fetch();
+        // then
+        for (String username : result) {
+            System.out.println(username);
         }
     }
 }
