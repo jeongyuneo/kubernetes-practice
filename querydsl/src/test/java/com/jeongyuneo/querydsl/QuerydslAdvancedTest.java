@@ -317,4 +317,19 @@ public class QuerydslAdvancedTest {
             System.out.println(username);
         }
     }
+
+    @Test
+    void Querydsl을_이용해_모든_회원이름을_소문자로_비교한다1() {
+        // when
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+                .where(member.username.eq(
+                        Expressions.stringTemplate("function('lower', {0})", member.username)))
+                .fetch();
+        // then
+        for (String username : result) {
+            System.out.println(username);
+        }
+    }
 }
