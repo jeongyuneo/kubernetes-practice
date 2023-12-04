@@ -2,6 +2,7 @@ package com.jeongyuneo.querydsl.repository;
 
 import com.jeongyuneo.querydsl.entity.Member;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -10,8 +11,8 @@ import java.util.Optional;
 
 import static com.jeongyuneo.querydsl.entity.QMember.member;
 
-@Repository
 @RequiredArgsConstructor
+@Repository
 public class MemberJPARepository {
 
     private final EntityManager entityManager;
