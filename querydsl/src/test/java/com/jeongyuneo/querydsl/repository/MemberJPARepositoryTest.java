@@ -34,4 +34,17 @@ class MemberJPARepositoryTest {
                 () -> assertThat(memberJPARepository.findByUsername("member1")).containsExactly(member)
         );
     }
+
+    @Test
+    void Querydsl을_이용해_만든_레포지토리의_메소드들이_정상적으로_동작한다() {
+        // given
+        Member member = new Member("member1", 10);
+        // when
+        memberJPARepository.save(member);
+        // then
+        assertAll(
+                () -> assertThat(memberJPARepository.findAll_Querydsl()).containsExactly(member),
+                () -> assertThat(memberJPARepository.findByUsername_Querydsl("member1")).containsExactly(member)
+        );
+    }
 }
