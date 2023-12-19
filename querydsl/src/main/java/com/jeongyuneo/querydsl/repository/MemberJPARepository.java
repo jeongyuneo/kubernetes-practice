@@ -98,8 +98,8 @@ public class MemberJPARepository {
                 .where(
                         usernameEq(condition.getUsername()),
                         teamNameEq(condition.getTeamName()),
-                        ageGoeEq(condition.getAgeGoe()),
-                        ageLoeEqu(condition.getAgeLoe())
+                        ageGoe(condition.getAgeGoe()),
+                        ageLoe(condition.getAgeLoe())
                 )
                 .fetch();
     }
@@ -118,14 +118,14 @@ public class MemberJPARepository {
         return team.name.eq(teamName);
     }
 
-    private BooleanExpression ageGoeEq(Integer ageGoe) {
+    private BooleanExpression ageGoe(Integer ageGoe) {
         if (ageGoe == null) {
             return null;
         }
         return member.age.goe(ageGoe);
     }
 
-    private BooleanExpression ageLoeEqu(Integer ageLoe) {
+    private BooleanExpression ageLoe(Integer ageLoe) {
         if (ageLoe == null) {
             return null;
         }
