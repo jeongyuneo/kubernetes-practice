@@ -129,7 +129,10 @@ public class MemberJPARepository {
         return team.name.eq(teamName);
     }
 
-    private BooleanExpression ageBetween(int ageLoe, int ageGoe) {
+    private BooleanExpression ageBetween(Integer ageLoe, Integer ageGoe) {
+        if (ageLoe == null || ageGoe == null) {
+            return null;
+        }
         return ageLoe(ageLoe).and(ageGoe(ageGoe));
     }
 
