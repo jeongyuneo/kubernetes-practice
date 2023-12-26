@@ -57,6 +57,7 @@ class MemberRepositoryTest {
         entityManager.persist(member2);
         entityManager.persist(member3);
         entityManager.persist(member4);
+
         MemberSearchCondition condition = new MemberSearchCondition(null, "teamB", 35, 40);
         // when
         List<MemberTeamDto> result = memberRepository.search(condition);
