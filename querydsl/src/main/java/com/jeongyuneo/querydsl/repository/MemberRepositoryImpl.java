@@ -3,9 +3,13 @@ package com.jeongyuneo.querydsl.repository;
 import com.jeongyuneo.querydsl.dto.MemberSearchCondition;
 import com.jeongyuneo.querydsl.dto.MemberTeamDto;
 import com.jeongyuneo.querydsl.dto.QMemberTeamDto;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -34,6 +38,32 @@ public class MemberRepositoryImpl implements CustomMemberRepository {
                         ageBetween(condition.getAgeLoe(), condition.getAgeGoe())
                 )
                 .fetch();
+    }
+
+    @Override
+    public Page<MemberTeamDto> searchPageSimple(MemberSearchCondition condition, Pageable pageable) {
+        QueryResults<MemberTeamDto> results = queryFactory
+                .select(new QMemberTeamDto(
+                        member.id,
+                        member.username,
+                        member.age,
+                        team.id,
+                        team.name))
+                .from(member)
+                .leftJoin(member.team, team)
+                .where(
+                        usernameEq(condition.getUsername()),
+                        teamNameEq(condition.getTeamName()),
+                        ageBetween(condition.getAgeLoe(), condition.getAgeGoe())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<MemberTeamDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     private BooleanExpression usernameEq(String usernameCondition) {
