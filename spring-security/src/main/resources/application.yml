@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    defer-datasource-initialization: true
+
+jwt:
+  secretKey: jqsdoifuUhjw235eoWuSGD0Whn2uijhy27A93udjkhfnL4ey1974er6y318w7quyeg
