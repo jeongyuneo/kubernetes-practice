@@ -1,4 +1,4 @@
-package com.jeongyuneo.springsecurity.authentication.service;
+package com.jeongyuneo.springsecurity.authentication.token.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 

@@ -1,6 +1,6 @@
-package com.jeongyuneo.springsecurity.authentication.filter;
+package com.jeongyuneo.springsecurity.authentication.token.filter;
 
-import com.jeongyuneo.springsecurity.authentication.service.TokenService;
+import com.jeongyuneo.springsecurity.authentication.token.service.TokenService;
 import com.jeongyuneo.springsecurity.member.entity.Member;
 import com.jeongyuneo.springsecurity.member.service.MemberReadService;
 import jakarta.servlet.FilterChain;
