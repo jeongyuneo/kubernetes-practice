@@ -9,18 +9,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.Optional;
 
 @Service
 public class JwtService implements TokenService {
 
-    private static final String ACCESS_TOKEN_HEADER = "Authorization";
     private static final String BEARER = "Bearer ";
     private static final String REMOVE = "";
     private static final String MEMBER_ID_CLAIM = "MemberId";
-    private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
-    private static final long ACCESS_TOKEN_EXPIRATION_PERIOD = 60 * 60 * 10 * 1000L;
 
     @Value("${jwt.secretKey}")
     private String secretKey;
@@ -28,15 +24,15 @@ public class JwtService implements TokenService {
     @Override
     public String issueAccessToken(Long id) {
         return JWT.create()
-                .withSubject(ACCESS_TOKEN_SUBJECT)
-                .withExpiresAt(new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRATION_PERIOD))
+                .withSubject(Jwt.ACCESS_TOKEN.name())
+                .withExpiresAt(Jwt.ACCESS_TOKEN.getExpirationTimeDate())
                 .withClaim(MEMBER_ID_CLAIM, id)
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
     @Override
     public Optional<String> extractAccessToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(ACCESS_TOKEN_HEADER))
+        return Optional.ofNullable(request.getHeader(Jwt.ACCESS_TOKEN.getHeaderName()))
                 .map(this::removePrefix);
     }
 
