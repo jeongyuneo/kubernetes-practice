@@ -8,6 +8,7 @@ import com.jeongyuneo.springsecurity.authentication.login.handler.LoginSuccessHa
 import com.jeongyuneo.springsecurity.authentication.login.service.LoginService;
 import com.jeongyuneo.springsecurity.authentication.token.handler.JwtAuthenticationEntryPoint;
 import com.jeongyuneo.springsecurity.authentication.token.filter.JwtAuthenticationProcessingFilter;
+import com.jeongyuneo.springsecurity.authentication.token.handler.JwtAuthenticationEntryPoint;
 import com.jeongyuneo.springsecurity.authentication.token.service.TokenService;
 import com.jeongyuneo.springsecurity.member.service.MemberReadService;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,7 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .addFilterAfter(customAuthenticationProcessingFilter(), LogoutFilter.class)
                 .addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationProcessingFilter.class)
+                .addFilterBefore(exceptionHandlingFilter(), JwtAuthenticationProcessingFilter.class)
                 .build();
     }
 
@@ -93,7 +94,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public ExceptionHandlingFilter exceptionHandlerFilter() {
+    public ExceptionHandlingFilter exceptionHandlingFilter() {
         return new ExceptionHandlingFilter(objectMapper);
     }
 }
