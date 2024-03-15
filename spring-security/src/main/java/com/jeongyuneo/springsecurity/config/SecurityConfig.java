@@ -6,6 +6,7 @@ import com.jeongyuneo.springsecurity.authentication.filter.ExceptionHandlingFilt
 import com.jeongyuneo.springsecurity.authentication.login.handler.LoginFailureHandler;
 import com.jeongyuneo.springsecurity.authentication.login.handler.LoginSuccessHandler;
 import com.jeongyuneo.springsecurity.authentication.login.service.LoginService;
+import com.jeongyuneo.springsecurity.authentication.token.handler.JwtAuthenticationEntryPoint;
 import com.jeongyuneo.springsecurity.authentication.token.filter.JwtAuthenticationProcessingFilter;
 import com.jeongyuneo.springsecurity.authentication.token.service.TokenService;
 import com.jeongyuneo.springsecurity.member.service.MemberReadService;
@@ -34,6 +35,7 @@ public class SecurityConfig {
     private final TokenService tokenService;
     private final LoginService loginService;
     private final MemberReadService memberReadService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,6 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_EXCLUDING_REQUESTS).permitAll()
                         .anyRequest().authenticated())
+                .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .addFilterAfter(customAuthenticationProcessingFilter(), LogoutFilter.class)
                 .addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationProcessingFilter.class)
