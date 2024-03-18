@@ -6,7 +6,9 @@ import com.jeongyuneo.springsecurity.authentication.filter.ExceptionHandlingFilt
 import com.jeongyuneo.springsecurity.authentication.login.handler.LoginFailureHandler;
 import com.jeongyuneo.springsecurity.authentication.login.handler.LoginSuccessHandler;
 import com.jeongyuneo.springsecurity.authentication.login.service.LoginService;
-import com.jeongyuneo.springsecurity.authentication.token.handler.JwtAuthenticationEntryPoint;
+import com.jeongyuneo.springsecurity.authentication.oauth2.handler.OAuth2LoginFailureHandler;
+import com.jeongyuneo.springsecurity.authentication.oauth2.handler.OAuth2LoginSuccessHandler;
+import com.jeongyuneo.springsecurity.authentication.oauth2.service.CustomOAuth2UserService;
 import com.jeongyuneo.springsecurity.authentication.token.filter.JwtAuthenticationProcessingFilter;
 import com.jeongyuneo.springsecurity.authentication.token.handler.JwtAuthenticationEntryPoint;
 import com.jeongyuneo.springsecurity.authentication.token.service.TokenService;
@@ -19,7 +21,9 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,13 +34,16 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @Configuration
 public class SecurityConfig {
 
-    private static final String[] AUTH_EXCLUDING_REQUESTS = {"/members", "/login"};
+    private static final String[] AUTH_EXCLUDING_REQUESTS = {"/members", "/login/**", "/oauth2/**", "/error"};
 
     private final ObjectMapper objectMapper;
     private final TokenService tokenService;
     private final LoginService loginService;
     private final MemberReadService memberReadService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,6 +55,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_EXCLUDING_REQUESTS).permitAll()
                         .anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler(oAuth2LoginFailureHandler)
+                )
                 .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .addFilterAfter(customAuthenticationProcessingFilter(), LogoutFilter.class)
                 .addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class)

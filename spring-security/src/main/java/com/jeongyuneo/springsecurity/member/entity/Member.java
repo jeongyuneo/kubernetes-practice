@@ -20,9 +20,16 @@ public class Member {
 
     private String username;
     private String password;
+    private String name;
+    private String email;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
+
+    private String socialId;
 
     public Member(String username, String password, Role role) {
         this.username = username;
@@ -30,7 +37,20 @@ public class Member {
         this.role = role;
     }
 
+    public Member(String socialId, SocialType socialType, Role role, String name, String email) {
+        this.username = email;
+        this.name = name;
+        this.email = email;
+        this.socialId = socialId;
+        this.socialType = socialType;
+        this.role = role;
+    }
+
     public static Member of(SignupRequest signupRequest, PasswordEncoder passwordEncoder) {
         return new Member(signupRequest.username(), passwordEncoder.encode(signupRequest.password()), Role.USER);
+    }
+
+    public static Member ofSocial(String socialId, SocialType socialType, String name, String email) {
+        return new Member(socialId, socialType, Role.USER, name, email);
     }
 }

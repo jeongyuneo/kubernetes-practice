@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ApplicationExceptionInfo {
 
     UNSUPPORTED_CONTENT_TYPE(HttpStatus.BAD_REQUEST, "지원하지 않는 컨텐트 타입입니다."),
+    UNSUPPORTED_SOCIAL_LOGIN(HttpStatus.BAD_REQUEST, "지원하지 않는 소셜 로그인입니다."),
     INVALID_TOKEN_TYPE(HttpStatus.BAD_REQUEST, "잘못된 토큰 타입입니다."),
 
     UNAUTHORIZED_MEMBER(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다."),

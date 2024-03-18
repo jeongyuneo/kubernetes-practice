@@ -1,12 +1,42 @@
 spring:
+  profiles:
+    include: oauth2
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        format_sql: true
+      format_sql: true
     show-sql: true
     defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+  security:
+    oauth2:
+      client:
+        registration:
+          azure:
+            provider: azure
+            client-id: ${azure.client-id}
+            client-secret: ${azure.client-secret}
+            redirect-uri: http://localhost:8080/login/oauth2/code/azure
+            authorization-grant-type: authorization_code
+            scope:
+              - https://graph.microsoft.com/.default
+        provider:
+          azure:
+            issuer-uri: https://login.microsoftonline.com/${azure.tenant-id}/v2.0
+            user-name-attribute: name
 
 jwt:
   secretKey: jqsdoifuUhjw235eoWuSGD0Whn2uijhy27A93udjkhfnL4ey1974er6y318w7quyeg

@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class CustomJsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final String DEFAULT_LOGIN_REQUEST_URL = "/login";
+    private static final String DEFAULT_LOGIN_REQUEST_URL = "/login/regular";
     private static final String USERNAME_KEY = "username";
     private static final String PASSWORD_KEY = "password";
 
