@@ -10,7 +10,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public enum Jwt {
 
-    ACCESS_TOKEN("Authorization", Duration.ofMinutes(10));
+    ACCESS_TOKEN("Authorization", Duration.ofMinutes(10)),
+    REFRESH_TOKEN("Authorization", Duration.ofMinutes(30));
 
     private final String headerName;
     private final Duration expirationTime;
