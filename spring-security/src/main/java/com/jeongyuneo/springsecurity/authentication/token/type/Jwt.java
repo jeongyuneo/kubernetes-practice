@@ -1,4 +1,4 @@
-package com.jeongyuneo.springsecurity.authentication.token.entity;
+package com.jeongyuneo.springsecurity.authentication.token.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

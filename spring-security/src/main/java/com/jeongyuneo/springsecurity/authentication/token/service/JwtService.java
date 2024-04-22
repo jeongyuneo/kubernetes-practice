@@ -2,7 +2,7 @@ package com.jeongyuneo.springsecurity.authentication.token.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.jeongyuneo.springsecurity.authentication.token.entity.Jwt;
+import com.jeongyuneo.springsecurity.authentication.token.type.Jwt;
 import com.jeongyuneo.springsecurity.exception.ApplicationExceptionInfo;
 import com.jeongyuneo.springsecurity.exception.TokenException;
 import jakarta.servlet.http.HttpServletRequest;
