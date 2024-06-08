@@ -11,7 +11,7 @@ import java.util.Date;
 public enum Jwt {
 
     ACCESS_TOKEN("Authorization", Duration.ofMinutes(10)),
-    REFRESH_TOKEN("Authorization", Duration.ofMinutes(30));
+    REFRESH_TOKEN("Authorization-Refresh", Duration.ofMinutes(30));
 
     private final String headerName;
     private final Duration expirationTime;
